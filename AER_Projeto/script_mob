@@ -1,0 +1,22 @@
+bm -f sample RandomWaypoint -n 5 -d 60 -x 1000 -y 750
+bm NSFile -f sample
+# use the resulting 'sample.ns_movements' file in CORE
+
+# nodes: 3, max time: 35.000000, max x: 600.00, max y: 600.00
+$node_(1) set X_ 144.0
+$node_(1) set Y_ 240.0
+$node_(1) set Z_ 0.00
+$ns_ at 1.00 "$node_(1) setdest 700.0 280.0 50.0"
+
+# nodes: 3, max time: 35.000000, max x: 600.00, max y: 600.00
+$node_(2) set X_ 300.0
+$node_(2) set Y_ 240.0
+$node_(2) set Z_ 0.00
+$ns_ at 1.00 "$node_(2) setdest 560.0 280.0 150.0"
+
+# nodes: 3, max time: 35.000000, max x: 600.00, max y: 600.00
+$node_(3) set X_ 300.0
+$node_(3) set Y_ 400.0
+$node_(3) set Z_ 0.00
+$ns_ at 1.00 "$node_(3) setdest 200.0 100.0 10.0"
+
