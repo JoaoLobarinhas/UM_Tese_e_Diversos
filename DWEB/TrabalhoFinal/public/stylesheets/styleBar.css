@@ -1,0 +1,21 @@
+#topNav{
+  background-color: var(--orange);
+  color: var(--colorText);
+}
+
+#buttonSearch{
+  margin-left: -17%;
+  border: none;
+  background: #fff;
+  padding-top: 2%;
+}
+
+.buttonGroupLeft{
+  margin-left:auto; 
+  margin-right:0;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
+}
+

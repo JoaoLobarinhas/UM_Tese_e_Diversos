@@ -1,0 +1,70 @@
+body, html {
+    height: 100%;
+}
+
+.header-background{
+    background-image: url("https://picsum.photos/800/600");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.profile-picture{
+    display: block;
+    max-width:100%;
+    max-height:100%;
+    width: 320px;
+    height: 320px;
+}
+
+.max-50{
+    width: 50%;
+    height: 50%;
+}
+
+.tab {
+    display: none;
+}
+
+.button-grad{
+    background: rgb(221,65,12);
+    background: radial-gradient(circle, rgba(221,65,12,1) 0%, rgba(188,32,0,1) 94%, rgba(156,0,0,1) 100%);
+}
+
+.load{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border-top: 2px solid var(--orange);
+    border-right: 2px solid transparent;
+    border-bottom:none;
+    border-left:none;
+    animation: spinner5 700ms linear infinite;
+}
+
+.w-65{
+    width: 65%
+}
+
+.is-invisible{
+    display: none;
+}
+    
+@keyframes spinner5 {
+    to {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (min-width: 1300px) {
+    .w-65{
+        width: 50%
+    }
+ }
+
+@media screen and (max-width: 577px) {
+   .max-50{
+        width: 70%;
+        height: 70%;
+   }
+}
+  

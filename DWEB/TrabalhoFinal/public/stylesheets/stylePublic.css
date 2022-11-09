@@ -1,0 +1,17 @@
+.img-public{
+    width: 50px;
+}
+
+.max-height-img{
+    max-height: 400px;
+    width: 100%;
+  }
+
+  .img-preview{
+    width: 70px;
+    height: 90px;
+  }
+
+  .w-80{
+    width: 80%;
+  }

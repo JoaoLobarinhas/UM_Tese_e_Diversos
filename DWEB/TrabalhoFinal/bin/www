@@ -1,0 +1,132 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('trabahofinal:server');
+var http = require('http');
+// var axios = require('axios');
+// var cookie = require('cookie');
+
+/**
+ * Get port from environment and store in Express.
+ */
+var myport = 3001;
+var port = normalizePort(process.env.PORT || myport);
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+
+/**
+ * SocketIO.
+ */
+// var io = require('socket.io').listen(server);
+
+// io.use(function(socket, next) {
+//   var data = socket.request;
+//   app.cookie(data, {}, function(err) {
+//     var sessionID = data.signedCookies['dwebTrabF'];
+//     console.log(sessionID)
+//     store.get(sessionID, function(err, session) {
+//       if (err || !session) {
+//         return next(new Error('Acesso negado!'));
+//       } else {
+//         socket.handshake.session = session;
+//         return next();
+//       }
+//     });
+//   });
+// });
+
+// io.on('connection', socket =>{
+
+
+//   console.log('We have a user connected !');
+//   var cookief = socket.handshake.headers.cookie; 
+//   console.log(cookief);
+//   var cookies = cookie.parse(socket.handshake.headers.cookie);
+//   console.log(cookies)
+//   app.use(function (req, res, next) {
+//     console.log(req.user)
+//   })
+//   socket.on('followUser',function(data){
+//     console.log(data)
+//     axios.post('http://localhost:3005/notifi/',data)
+//       .then(data =>{
+        
+//         socketId =  getSocketIdFromUserId(user_id);
+//       })
+//       .catch(e=>console.log(e))
+//   });
+// })
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  console.log("Servidor à escuta na porta " + myport);
+}

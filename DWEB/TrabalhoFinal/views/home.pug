@@ -1,0 +1,33 @@
+doctype html
+
+html
+  head
+    title MIEI Thing
+    script(src="/jquery/jquery.min.js")
+    script(src="/popper/popper.min.js")
+    script(src="/jsBootstrap/bootstrap.min.js")
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel="stylesheet", href="/stylesheets/colors.css")
+    link(rel="stylesheet", href="/stylesheets/styleHome.css")
+    link(rel="stylesheet", href="/material/material-icons.css")
+  body
+    .row.row-Home.h-100
+      .col-md-4.pt-md-5.px-md-5.overflow-hidden.text-white.d-flex.justify-content-center.align-items-center.home-grad
+        i.px-md-3.material-icons school
+        p.h2 MIEI Thing
+      .col-md-8.d-flex.pt-md-5.px-md-5.text-center.d-flex.justify-content-center.align-items-center.overflow-hidden.w-65
+        form.form-signin(action="/home", method="post")
+          h3.mb-3.font-weight-normal Login
+          .form-label-group
+            input.form-control(type="text", id="inputNumStudent", name="email", placeholder="Email")
+            label.text-left(for="inputNumStudent") Email address
+          .form-label-group
+            input.form-control(type="password", id="inputPassword", placeholder="Password", name="password")
+            label.text-left(for="inputPassword") Password
+          if failed
+            p.text-danger Email our password are invalid.
+          a.btn.btn-link.pb-3(href="/register") Create an account now!
+          input.btn.btn-lg.btn-block.text-white.login-button-grad(type="submit", value="Sign in")
+          p.pt-md-3.text-muted Or login with your Google Account
+          a.btn.btn-lg.btn-block(href="/auth/google") Sign In with Google
+           

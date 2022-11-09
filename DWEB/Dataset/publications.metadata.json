@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"DwebTrabF.publications"}],"uuid":"6cb1ee3ca3f54791ab6b598858a10655"}

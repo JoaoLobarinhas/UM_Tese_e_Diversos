@@ -1,0 +1,158 @@
+extends layout
+
+append head
+    script(src="/axios/axios.min.js")
+    script(src="/javascripts/form-ownProfiles.js")
+    script(src="/javascripts/comments.js")
+    link(rel="stylesheet", href="/stylesheets/styleProfiles.css")
+    link(rel="stylesheet", href="/stylesheets/stylePublic.css")
+
+block content
+    .container.w-100.pt-5
+        .mb-3.header-background.border-top-0.border-light.mb-3(id="headerPhoto", style={"background-image": 'url('+headerPic+')'})
+            div.pb-5
+            img.mx-auto.d-block.profile-picture.border.border-white(id="profilePhoto", src=profilePic)
+            h4.pt-3.text-center.text-white.pb-3=data.firstName+" "+data.lastName
+        .row.justify-content-md-center
+            .col-md-4.order-md-1.mb-4.mr-3.pt-2.background-white.border.border-light
+                ul.list-group
+                    li.list-group-item
+                        .d-inline-flex.mt-2
+                            i.material-icons person_outline
+                            h5 Information
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 perm_contact_calendar
+                            p(id="number")="Student Number: "+data.studentNumber
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 calendar_today
+                            p="Year of Inscription: "+data.curso.yearOfInscription
+                    if(data.curso.yearOfConclusion)
+                        li.list-group-item
+                            .d-inline-flex
+                                i.material-icons.pr-2 date_range
+                                p="Year Of Conclusion: "+data.curso.yearOfConclusion
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 today
+                            p="Year of Enrollment: "+data.curso.year
+                div.pt-3
+                    .row.pb-3
+                        .col
+                            button.btn.btn-light.text-center(id="btnFollowing")="Following: "+data.following
+                        .col
+                            button.btn.btn-light.text-center(id="btnFollowers")="Followers: "+data.followers
+                    btn.btn.btn-secondary.btn-lg.btn-block.mb-3.follow-button-grad(id="btnEdit" data-toggle="modal" data-target="#modalEditUser") Edit Profile
+            .col-md-7.order-md-2.border.border-light.background-white
+                h5.pt-2 Publications
+                each pub in public
+                    .card.flex-row.flex-wrap.mb-3
+                        .card-header.border-0.background-white
+                            img.rounded-circle.img-fluid.img-fluid.mt-2.img-public(src=pub.owner.photo)
+                        .card-block.w-80.px-2.pt-2
+                            .d-inline-flex
+                                a(href="/user/"+pub.owner.studentNumber)
+                                    p.pt-2.card-title.font-weight-bold.mb-0=pub.owner.firstName+" "+pub.owner.lastName
+                                p.pt-2.pl-2.mb-0=pub.date
+                            if pub.responseTo
+                                a.pt-2.card-title(href="/public/"+pub.responseTo+"?resp="+pub._id)
+                                    p.pt-1="Comment to "+pub.responseTo
+                            if !pub.responseTo
+                                a.pt-2.card-title(href="/public/"+pub._id)
+                                    p.pt-1="View post "+pub._id
+                            p=pub.text
+                            if(pub.file)
+                                div(id="contentUploaded")
+                                    if(pub.file.image)
+                                        img.img-fluid.mt-2.mb-2.max-height-img(src=pub.file.pubCont)
+                                    if(pub.file.pdf)
+                                        a.btn.btn-outline-secondary(href=pub.file.pubCont download=pub._id+".pdf")
+                                            card
+                                                .row.no-gutters
+                                                    .col-3
+                                                        img.img-fluid.img-preview(src="/images/pdf.png")
+                                                    .col-9
+                                                        .card-block.px-2
+                                                            h5.card-title.pt-2=pub.file.filename
+                                    if(pub.file.doc)
+                                        a.btn.btn-outline-secondary(href=pub.file.pubCont download=pub._id+pub.file.filetype)
+                                            card
+                                                .row.no-gutters
+                                                    .col-3
+                                                        img.img-fluid.img-preview(src="/images/word.png")
+                                                    .col
+                                                        .card-block.px-2
+                                                            h5.card-title.pt-2=pub.file.filename
+                        div.container.mt-2.border.pb-2
+                            form(action="/public/comment/"+pub._id, method="post", enctype="multipart/form-data")
+                                .d-flex
+                                    input.form-control.mt-2(type="text", placeholder="Comment...", name="text" id=pub._id)
+                                    .d-inline-flex.mt-2
+                                        span.btn.btn-file.btn-secondary.pb-0
+                                            .d-inline-flex
+                                                i.material-icons attachment
+                                            input(type="file", name="files", id="fl_"+pub._id)
+                                div(id="pr_"+pub._id)
+                                small.form-text.text-muted.pb-2(id="fb_"+pub._id) The file can't be larger than 1mb.
+                                button.btn.follow-button-grad.text-white.btn-lg.btn-block.mt-2.pb-0( id="btn_"+pub._id hidden) 
+                                    h6 Submit
+                        
+        .modal.fade(id="modalEditUser" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true")
+            .modal-dialog.modal-lg.modal-dialog-scrollable(role="document")
+                .modal-content
+                    .modal-header
+                        h5.modal-title Edit User
+                        button.close(type="button" data-dismiss="modal" aria-label="Close")
+                            i.material-icons close
+                    .modal-body
+                        form.needs-validation.is-invisible(action="/user/updateUser", method="post", id="form", enctype="multipart/form-data")
+                            .mb-5.header-background(id="headerPreview", style={"background-image": 'url('+headerPic+')'})
+                                img.p-5.mx-auto.d-block.profile-picture(src=profilePic, id="profilePreview") 
+                            .mb-3
+                                label(for="pictureProfile") Profile Picture *
+                                input.form-control-file(type="file", id="pictureProfile", aria-describedby="fileHelp", name="pictureProfile")
+                                small.form-text.text-muted(id="PPFeedback") Your profile picture can't be larger than 1mb.
+                            .mb-3
+                                label(for="pictureHeader") Header Picture *
+                                input.form-control-file(type="file", id="pictureHeader", aria-describedby="fileHelp", name="pictureHeader")
+                                small.form-text.text-muted(id="HPFeedback") Your header picture can't be larger than 1mb.
+                            .row
+                                .col-md-6.mb-3
+                                    label(for="firstName") First Name *
+                                    input.form-control(type="text", name="firstName", id="firstName", value=data.firstName)
+                                    div.invalid-feedback First name is required.
+                                .col-md-6.mb-3
+                                    label(for="lastName") Last Name *
+                                    input.form-control(type="text", name="lastName", id="lastName", value=data.lastName)
+                                    div.invalid-feedback Last name is required.
+                            .mb-3
+                                label(for="studentNumber") Student Number *
+                                input.form-control(type="text", name="studentNumber", id="studentNumber" value=data.studentNumber)
+                                div.invalid-feedback(id="studentNumberFeedback") Student number is required.
+                            .mb-3
+                                label(for="yearInscription") Year of Inscription *
+                                input.form-control(type="month", value=data.curso.yearOfInscription, id="yearInscription", name="yearOfInscription")
+                                div.invalid-feedback Year of inscription is required.
+                            .mb-3
+                                if(data.curso.yearOfConclusion)
+                                    label(for="yearConclusion") Year of Counclusion
+                                    input.form-control(type="month", value=data.curso.yearOfConclusion, id="yearConclusion", name="yearOfConclusion")
+                                else
+                                    label(for="yearConclusion") Year of Counclusion
+                                    input.form-control(type="month", id="yearConclusion", name="yearOfConclusion")
+                            .mb-3
+                                label(for="year") Year of Enrollment *
+                                select.custom-select.mb-2.mr-sm-2.mb-sm-0(id="year",name="year")
+                                    option(selected, disabled, hidden, value="0") Choose...
+                                    option(value="1") 1
+                                    option(value="2") 2
+                                    option(value="3") 3
+                                    option(value="4") 4
+                                    option(value="5") 5
+                                div.invalid-feedback Year of enrollment is required.
+                            .mb-3
+                                p.text-muted Every field with * is required
+                    .modal-footer
+                        button.btn.btn-secondary(type="button" data-dismiss="modal") Close
+                        button.btn.btn-primary.follow-button-grad(type="button" class="btn btn-primary" id="btnUpdate") Update

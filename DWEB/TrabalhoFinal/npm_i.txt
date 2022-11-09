@@ -1,0 +1,4 @@
+npm i bootstrap --save
+npm i jquery --save
+npm i popper.js --save
+npm install material-icons

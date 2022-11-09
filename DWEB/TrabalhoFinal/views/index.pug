@@ -1,0 +1,108 @@
+extends layout
+
+append head
+    script(src="/axios/axios.min.js")
+    script(src="/javascripts/_index.js")
+    script(src="/javascripts/comments.js")
+    link(rel="stylesheet", href="/stylesheets/styleIndex.css")
+    link(rel="stylesheet", href="/stylesheets/styleProfiles.css")
+    link(rel="stylesheet", href="/stylesheets/stylePublic.css")
+
+block content
+  .container.w-100.pt-5
+    .row
+      .col-md-2.order-md-1.d-inline-flex.p-2.sidebar.pt-5.pr-0.pl-0
+        .sidebar.sidebar-sticky.border-orange
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link(href="/user/")
+                .d-inline-flex.mt-2
+                  i.material-icons perm_identity
+                  h5 Profile
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link.active(href="/")
+                .d-inline-flex.mt-2
+                  i.material-icons featured_play_list
+                  h5 Feed
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link(href="/")
+                .d-inline-flex.mt-2
+                  i.material-icons whatshot
+                  h5 Posts
+      .col-md-8.order-md-2.ml-sm-auto.col-lg-10.rounded.px-4.background-white.mt-3
+        form(action="/public/", method="post", id="form", enctype="multipart/form-data")
+          .card.flex-row.flex-wrap.border-0.border-orange
+            .card-header.border-0.background-white
+              img.rounded-circle.img-fluid.img-fluid.mt-2.img-small(src=imageP)
+            .card-block.w-80.px-2.pt-2
+              h4.card-title Make a post
+              textarea.form-control.input-lg.textareaFix(id="text", name="text" placeholder="Something...")
+              div(id="contentUploaded")
+              .d-inline-flex.mt-2
+                span.btn.btn-file.btn-secondary.pb-0
+                  .d-inline-flex
+                    i.material-icons attachment
+                    h6 Atach a File
+                  input(type="file", name="files", id="ogfiles")
+              button.btn.button-grad.text-white.float-right.mt-2.mb-2( id="btnSubmit")
+                  h6 Submit
+              small.form-text.text-muted.pb-2(id="feedbackFile") The file can't be larger than 1mb.
+        .container.mt-4.border
+          if public
+            h5.pt-2.mb-4 Publications
+          each pub in public
+            .card.flex-row.flex-wrap.mb-3
+              .card-header.border-0.background-white
+                  img.rounded-circle.img-fluid.img-fluid.mt-2.img-public(src=pub.owner.photo)
+              .card-block.w-80.px-2.pt-2
+                .d-inline-flex
+                  a(href="/user/"+pub.owner.studentNumber)
+                    p.pt-2.card-title.font-weight-bold.mb-0=pub.owner.firstName+" "+pub.owner.lastName
+                  p.pt-2.pl-2.mb-0=pub.date
+                if(pub.responseTo)
+                  a.pt-2.card-title(href="/public/"+pub.responseTo+"?resp="+pub._id)
+                    p.pt-1="Comment to "+pub.responseTo
+                else
+                  a.pt-2.card-title(href="/public/"+pub._id)
+                    p.pt-1="View post "+pub._id
+                p=pub.text
+                if(pub.nComments)
+                   a(href="/public/"+pub._id)
+                      p.pt-2="See all "+pub.nComments+" comments"
+                if(pub.file)
+                  div(id="contentUploaded")
+                    if(pub.file.image)
+                      img.img-fluid.mt-2.mb-2.max-height-img(src=pub.file.pubCont)
+                    if(pub.file.pdf)
+                      a.btn.btn-outline-secondary(href=pub.file.pubCont download=pub._id+".pdf")
+                        .card
+                          .row.no-gutters
+                            .col-3
+                              img.img-fluid.img-preview(src="/images/pdf.png")
+                            .col-9
+                              .card-block.px-2
+                                h5.card-title.pt-2=pub.file.filename
+                    if(pub.file.doc)
+                      a.btn.btn-outline-secondary(href=pub.file.pubCont download=pub._id+pub.file.filetype)
+                        .card
+                          .row.no-gutters
+                            .col-3
+                              img.img-fluid.img-preview(src="/images/word.png")
+                            .col
+                              .card-block.px-2
+                                h5.card-title.pt-2=pub.file.filename
+              div.container.mt-2.border.pb-2
+                form(action="/public/comment/"+pub._id, method="post", enctype="multipart/form-data")
+                  .d-flex
+                    input.form-control.mt-2(type="text", placeholder="Comment...", name="text", tag="comments", id=pub._id)
+                    .d-inline-flex.mt-2
+                      span.btn.btn-file.btn-secondary.pb-0
+                        .d-inline-flex
+                          i.material-icons attachment
+                        input(type="file", name="files", id="fl_"+pub._id)
+                  div(id="pr_"+pub._id)
+                  small.form-text.text-muted.pb-2(id="fb_"+pub._id) The file can't be larger than 1mb.
+                  button.btn.follow-button-grad.text-white.btn-lg.btn-block.mt-2.pb-0( id="btn_"+pub._id hidden) 
+                    h6 Submit

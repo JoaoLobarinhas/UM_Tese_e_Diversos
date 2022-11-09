@@ -1,0 +1,162 @@
+doctype html
+
+html
+  head
+    title MIEI Thing
+    script(src="/jquery/jquery.min.js")
+    script(src="/axios/axios.min.js")
+    script(src="/popper/popper.min.js")
+    script(src="/jsBootstrap/bootstrap.min.js")
+    script(src="/javascripts/form-register.js")
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel="stylesheet", href="/stylesheets/colors.css")
+    link(rel="stylesheet", href="/stylesheets/styleRegister.css")
+    link(rel="stylesheet", href="/material/material-icons.css")
+  body
+    .d-flex.align-items-center.flex-column.justify-content-center.h-100
+      button.load(id="load")
+      if(data)
+        form.needs-validation.is-invisible(action="/registerGoogle", method="post", id="form", enctype="multipart/form-data")
+          .container
+            .tab
+              h3 End your register
+              .card
+                .card-header
+                  h5.card-title Basic Information
+                .card-body
+                  .row
+                    .col-md-6.mb-3
+                      label(for="firstName") First Name *
+                      input.form-control(type="text", name="firstName", id="firstName", value=data.firstName)
+                      div.invalid-feedback First name is required.
+                    .col-md-6.mb-3
+                      label(for="lastName") Last Name *
+                      input.form-control(type="text", name="lastName", id="lastName", value=data.lastName)
+                      div.invalid-feedback Last name is required.
+                  .mb-3
+                    label(for="studentNumber") Student Number *
+                    input.form-control(type="text", name="studentNumber", id="studentNumber")
+                    div.invalid-feedback(id="studentNumberFeedback") Student number is required.
+                  .mb-3
+                    p.text-muted Every field with * is required
+            .tab
+              .card
+                .card-header
+                  h5.card-title Course Information
+                .card-body
+                  .mb-3
+                    label(for="yearInscription") Year of Inscription *
+                    input.form-control(type="month", value="2020-01", id="yearInscription", name="yearOfInscription")
+                    div.invalid-feedback Year of inscription is required.
+                  .mb-3
+                    label(for="yearConclusion") Year of Counclusion
+                    input.form-control(type="month", id="yearConclusion", name="yearOfConclusion")
+                  .mb-3
+                    label(for="year") Year of Enrollment *
+                    select.custom-select.mb-2.mr-sm-2.mb-sm-0(id="year",name="year")
+                      option(selected, disabled, hidden, value="0") Choose...
+                      option(value="1") 1
+                      option(value="2") 2
+                      option(value="3") 3
+                      option(value="4") 4
+                      option(value="5") 5
+                    div.invalid-feedback Year of enrollment is required.
+                  .mb-3
+                    p.text-muted Every field with * is required
+            .tab
+              .card
+                .card-header
+                  h5.card-title Photos
+                .card-body
+                  .mb-5.header-background(id="headerPreview")
+                    img.p-5.mx-auto.d-block.profile-picture(src="https://picsum.photos/150", id="profilePreview") 
+                  .mb-3
+                    label(for="pictureProfile") Profile Picture *
+                    input.form-control-file(type="file", id="pictureProfile", aria-describedby="fileHelp", name="pictureProfile")
+                    small.form-text.text-muted(id="PPFeedback") Your profile picture can't be larger than 1mb.
+                  .mb-3
+                    label(for="pictureHeader") Header Picture *
+                    input.form-control-file(type="file", id="pictureHeader", aria-describedby="fileHelp", name="pictureHeader")
+                    small.form-text.text-muted(id="HPFeedback") Your header picture can't be larger than 1mb.
+                  .mb-3
+                    p.text-muted Every field with * is required
+            div(style="overflow:auto;")
+              div(style="float:right;")
+                button.btn.btn-secondary(type="button" id="prevBtn" onclick="nextPrev(-1)") Previous
+                button.btn.button-grad.text-white.is-invisible(type="button" id="nextBtn" onclick="nextPrev(1)") Next
+      else
+        form.needs-validation.is-invisible(action="/register", method="post", id="form", enctype="multipart/form-data")
+          .container
+            .tab
+              .card
+                .card-header
+                  h5.card-title Basic Information
+                .card-body
+                  .row
+                    .col-md-6.mb-3
+                      label(for="firstName") First Name *
+                      input.form-control(type="text", name="firstName", id="firstName")
+                      div.invalid-feedback First name is required.
+                    .col-md-6.mb-3
+                      label(for="lastName") Last Name *
+                      input.form-control(type="text", name="lastName", id="lastName")
+                      div.invalid-feedback Last name is required.
+                  .mb-3
+                    label(for="email") Email *
+                    input.form-control(type="email", name="email", id="email")
+                    div.invalid-feedback(id="emailFeedback") Email is required.
+                  .mb-3
+                    label(for="password") Password *
+                    input.form-control(type="password", name="password", id="password")
+                    div.invalid-feedback(id="passwordFeedback") Password is required.
+                  .mb-3
+                    label(for="studentNumber") Student Number *
+                    input.form-control(type="text", name="studentNumber", id="studentNumber")
+                    div.invalid-feedback(id="studentNumberFeedback") Student number is required.
+                  .mb-3
+                    p.text-muted Every field with * is required
+            .tab
+              .card
+                .card-header
+                  h5.card-title Course Information
+                .card-body
+                  .mb-3
+                    label(for="yearInscription") Year of Inscription *
+                    input.form-control(type="month", value="2020-01", id="yearInscription", name="yearOfInscription")
+                    div.invalid-feedback Year of inscription is required.
+                  .mb-3
+                    label(for="yearConclusion") Year of Counclusion
+                    input.form-control(type="month", id="yearConclusion", name="yearOfConclusion")
+                  .mb-3
+                    label(for="year") Year of Enrollment *
+                    select.custom-select.mb-2.mr-sm-2.mb-sm-0(id="year",name="year")
+                      option(selected, disabled, hidden, value="0") Choose...
+                      option(value="1") 1
+                      option(value="2") 2
+                      option(value="3") 3
+                      option(value="4") 4
+                      option(value="5") 5
+                    div.invalid-feedback Year of enrollment is required.
+                  .mb-3
+                    p.text-muted Every field with * is required
+            .tab
+              .card
+                .card-header
+                  h5.card-title Photos
+                .card-body
+                  .mb-5.header-background(id="headerPreview")
+                    img.p-5.mx-auto.d-block.profile-picture(src="https://picsum.photos/150", id="profilePreview") 
+                  .mb-3
+                    label(for="pictureProfile") Profile Picture *
+                    input.form-control-file(type="file", id="pictureProfile", aria-describedby="fileHelp", name="pictureProfile")
+                    small.form-text.text-muted(id="PPFeedback") Your profile picture can't be larger than 1mb.
+                  .mb-3
+                    label(for="pictureHeader") Header Picture *
+                    input.form-control-file(type="file", id="pictureHeader", aria-describedby="fileHelp", name="pictureHeader")
+                    small.form-text.text-muted(id="HPFeedback") Your header picture can't be larger than 1mb.
+                  .mb-3
+                    p.text-muted Every field with * is required
+            div(style="overflow:auto;")
+              div(style="float:right;")
+                button.btn.btn-secondary(type="button" id="prevBtn" onclick="nextPrev(-1)") Previous
+                button.btn.button-grad.text-white.is-invisible(type="button" id="nextBtn" onclick="nextPrev(1)") Next

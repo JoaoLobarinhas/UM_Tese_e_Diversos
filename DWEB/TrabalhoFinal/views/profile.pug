@@ -1,0 +1,107 @@
+extends layout
+
+append head
+    script(src="/axios/axios.min.js")
+    script(src="/javascripts/form-profiles.js")
+    link(rel="stylesheet", href="/stylesheets/styleProfiles.css")
+    link(rel="stylesheet", href="/stylesheets/stylePublic.css")
+    script(src="/javascripts/comments.js")
+
+block content
+    .container.w-100.pt-5
+        .mb-3.header-background.border-top-0.border-light.mb-3(id="headerPhoto", style={"background-image": 'url('+headerPic+')'})
+            div.pb-5
+            img.mx-auto.d-block.profile-picture.border.border-white(id="profilePhoto", src=profilePic)
+            h4.pt-3.text-center.text-white.pb-3=data.firstName+" "+data.lastName
+        .row.justify-content-md-center
+            .col-md-4.order-md-1.mb-4.mr-3.pt-2.background-white.border.border-light
+                ul.list-group
+                    li.list-group-item
+                        .d-inline-flex.mt-2
+                            i.material-icons person_outline
+                            h5 Information
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 perm_contact_calendar
+                            p(id="studentNumber")="Student Number: "+data.studentNumber
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 calendar_today
+                            p="Year of Inscription: "+data.curso.yearOfInscription
+                    if(data.curso.yearOfConclusion)
+                        li.list-group-item
+                            .d-inline-flex
+                                i.material-icons.pr-2 date_range
+                                p="Year Of Conclusion: "+data.curso.yearOfConclusion
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 today
+                            p="Year of Enrollment: "+data.curso.year
+                div.pt-3
+                    .row.pb-3
+                        .col
+                            button.btn.btn-light.text-center(id="btnFollowing")="Following: "+data.following
+                        .col
+                            button.btn.btn-light.text-center(id="btnFollowers")="Followers: "+data.followers
+                    if(following)
+                        btn.btn.btn-secondary.btn-lg.btn-block.mb-3(id="btnFollow") Unfollow
+                    else
+                        btn.btn.btn-secondary.btn-lg.btn-block.mb-3.follow-button-grad(id="btnFollow") Follow
+            .col-md-7.order-md-2.border.border-light.background-white
+                h5.pt-2 Publications
+                each pub in public
+                    .card.flex-row.flex-wrap.mb-3
+                        .card-header.border-0.background-white
+                            img.rounded-circle.img-fluid.img-fluid.mt-2.img-public(src=pub.owner.photo)
+                        .card-block.w-80.px-2.pt-2
+                            .d-inline-flex
+                                a(href="/user/"+pub.owner.studentNumber)
+                                    p.pt-2.card-title.font-weight-bold.mb-0=pub.owner.firstName+" "+pub.owner.lastName
+                                p.pt-2.pl-2.mb-0=pub.date
+                            if pub.responseTo
+                                a.pt-2.card-title(href="/public/"+pub.responseTo+"?resp="+pub._id)
+                                    p.pt-1="Comment to "+pub.responseTo
+                            else
+                                a.pt-2.card-title(href="/public/"+pub._id)
+                                    p.pt-1="View post "+pub._id
+                            p=pub.text
+                            if(pub.nComments)
+                                a(href="/public/"+pub._id)
+                                    p.pt-2="See all "+pub.nComments+" comments"
+                            if(pub.file)
+                                div(id="contentUploaded")
+                                    if(pub.file.image)
+                                        img.img-fluid.mt-2.mb-2.max-height-img(src=pub.file.pubCont)
+                                    if(pub.file.pdf)
+                                        a.btn.btn-outline-secondary(href=pub.file.pubCont download=pub._id+".pdf")
+                                            .card
+                                                .row.no-gutters
+                                                    .col-3
+                                                        img.img-fluid.img-preview(src="/images/pdf.png")
+                                                    .col-9
+                                                        .card-block.px-2
+                                                            h5.card-title.pt-2=pub.file.filename
+                                    if(pub.file.doc)
+                                        a.btn.btn-outline-secondary(href=pub.file.pubCont download=pub._id+pub.file.filetype)
+                                            .card
+                                                .row.no-gutters
+                                                    .col-3
+                                                        img.img-fluid.img-preview(src="/images/word.png")
+                                                    .col
+                                                        .card-block.px-2
+                                                            h5.card-title.pt-2=pub.file.filename
+                        div.container.mt-2.border.pb-2
+                            form(action="/public/comment/"+pub._id, method="post", enctype="multipart/form-data")
+                                .d-flex
+                                    input.form-control.mt-2(type="text", placeholder="Comment...", name="text" id=pub._id)
+                                    .d-inline-flex.mt-2
+                                        span.btn.btn-file.btn-secondary.pb-0
+                                            .d-inline-flex
+                                                i.material-icons attachment
+                                            input(type="file", name="files", id="fl_"+pub._id)
+                                div(id="pr_"+pub._id)
+                                small.form-text.text-muted.pb-2(id="fb_"+pub._id) The file can't be larger than 1mb.
+                                button.btn.follow-button-grad.text-white.btn-lg.btn-block.mt-2.pb-0( id="btn_"+pub._id hidden) 
+                                    h6 Submit
+
+                            
